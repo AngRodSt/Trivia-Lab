@@ -1,10 +1,10 @@
 # Documentación del Proyecto Trivia App
 
-## 📋 Descripción General
+## Descripción General
 
 Esta es una aplicación web de trivia/quiz que permite a maestros crear trivias y a estudiantes participar en ellas. El sistema incluye autenticación con verificación por email, roles de usuario (maestro/estudiante) y gestión de resultados.
 
-## 🏗️ Arquitectura del Proyecto
+## Arquitectura del Proyecto
 
 ### **Estructura de Carpetas**
 
@@ -18,7 +18,7 @@ trivia-app-clean/
 
 ---
 
-## 📁 Análisis de Archivos
+## Análisis de Archivos
 
 ### **Archivos Raíz**
 
@@ -62,7 +62,7 @@ trivia-app-clean/
 #### `backend/db/db.js`
 
 - **Propósito**: Configuración alternativa de conexión a MongoDB
-- **Estado**: ❌ **ARCHIVO NO UTILIZADO** - Parece ser código legacy
+- **Estado**: **ARCHIVO NO UTILIZADO** - Parece ser código legacy
 - **Configuración**: Conecta a `mongodb://root:secret@localhost:27017/mi_base_datos`
 
 ---
@@ -135,12 +135,12 @@ trivia-app-clean/
   - Envío de emails de verificación
   - Validación de credenciales
 
-#### `backend/routes/trivia.js` ❌ **FALTA IMPLEMENTAR**
+#### `backend/routes/trivia.js` **IMPLEMENTADO**
 
 - **Estado**: Archivo referenciado en `server.js` pero no existe
 - **Propósito esperado**: Gestión de trivias (crear, listar, obtener por código)
 
-#### `backend/routes/results.js` ❌ **FALTA IMPLEMENTAR**
+#### `backend/routes/results.js` **IMPLEMENTADO**
 
 - **Estado**: Archivo referenciado en `server.js` pero no existe
 - **Propósito esperado**: Gestión de resultados (guardar, consultar)
@@ -169,7 +169,7 @@ trivia-app-clean/
   - Las contraseñas se hashean automáticamente
 - **Conexión**: Usa la misma configuración que `db.js`
 
-#### `backend/script/test.js` ❌ **ARCHIVO NO ENCONTRADO**
+#### `backend/script/test.js` **ARCHIVO NO ENCONTRADO**
 
 - **Estado**: Referenciado pero no existe en el proyecto
 
@@ -181,25 +181,25 @@ trivia-app-clean/
 
 - **Propósito**: Página principal/landing
 - **Contenido**: Página simple con enlaces a registro, login y verificación
-- **Estado**: ⚠️ **MUY BÁSICO** - Solo contiene enlaces
+- **Estado**: **MUY BÁSICO** - Solo contiene enlaces
 
 #### `frontend/register.html`
 
 - **Propósito**: Formulario de registro de usuarios
 - **Campos**: Username, email, password, rol (estudiante/maestro)
-- **Estado**: ⚠️ **SIN ESTILOS** - HTML mínimo sin CSS
+- **Estado**: **SIN ESTILOS** - HTML mínimo sin CSS
 
 #### `frontend/login.html`
 
 - **Propósito**: Formulario de inicio de sesión
 - **Campos**: Email y contraseña
-- **Estado**: ⚠️ **SIN ESTILOS** - HTML mínimo
+- **Estado**: **SIN ESTILOS** - HTML mínimo
 
 #### `frontend/verify.html`
 
 - **Propósito**: Formulario para verificar email con código
 - **Campos**: Email y código de verificación
-- **Estado**: ⚠️ **SIN ESTILOS** - HTML mínimo
+- **Estado**: **SIN ESTILOS** - HTML mínimo
 
 #### `frontend/app.js`
 
@@ -208,11 +208,11 @@ trivia-app-clean/
   - Manejo de formularios (registro, login, verificación)
   - Comunicación con API backend (`http://localhost:5000/api`)
   - Alertas básicas para mostrar respuestas
-- **Estado**: ⚠️ **CÓDIGO MINIFICADO** - Difícil de mantener
+- **Estado**: **CÓDIGO MINIFICADO** - Difícil de mantener
 
 ---
 
-## 🗄️ Configuración de Base de Datos
+## Configuración de Base de Datos
 
 ### **Tipo de Conexión: NUBE (MongoDB Atlas)**
 
@@ -222,7 +222,7 @@ La aplicación está configurada para usar MongoDB **Atlas** (nube):
    - Variable de entorno: `MONGO_URI` requerida
    - Formato: `mongodb+srv://usuario:password@cluster.mongodb.net/triviaapp`
 
-2. **Docker** ❌ **NO NECESARIO**:
+2. **Docker - NO NECESARIO**:
    - Al usar MongoDB Atlas, no se requiere Docker para la base de datos
    - El archivo `docker-compose.yml` puede eliminarse o mantenerse para desarrollo local opcional
 
@@ -232,65 +232,57 @@ La aplicación está configurada para usar MongoDB **Atlas** (nube):
    - Configurar credenciales de email para verificación
 
 ### **Ventajas de MongoDB Atlas**:
-- ✅ Sin necesidad de gestionar infraestructura de DB
-- ✅ Backups automáticos
-- ✅ Escalabilidad automática
-- ✅ Monitoreo incluido
-- ✅ Acceso desde cualquier lugar
+- Sin necesidad de gestionar infraestructura de DB
+- Backups automáticos
+- Escalabilidad automática
+- Monitoreo incluido
+- Acceso desde cualquier lugar
 
 ---
 
-## ✅ Issues Resueltos
+## Issues Resueltos
 
 ### **Archivos Completados**:
 
-1. ✅ `backend/routes/trivia.js` - Rutas para gestión de trivias (CREADO)
-2. ✅ `backend/routes/results.js` - Rutas para resultados (CREADO)
-3. ✅ `backend/middleware/auth.js` - Middleware de autenticación JWT (CREADO)
-4. ✅ Sintaxis estandarizada a ES6 modules (ACTUALIZADO)
-5. ✅ Configuración para MongoDB Atlas (ACTUALIZADO)
+1. `backend/routes/trivia.js` - Rutas para gestión de trivias (CREADO)
+2. `backend/routes/results.js` - Rutas para resultados (CREADO) 
+3. `backend/middleware/auth.js` - Middleware de autenticación JWT (CREADO)
+4. Sintaxis estandarizada a ES6 modules (ACTUALIZADO)
+5. Configuración para MongoDB Atlas (ACTUALIZADO)
 
-### **Archivos Pendientes**:
+### **Problemas Pendientes**:
 
-### **Inconsistencias**:
-
-1. Mezcla de `import/export` y `require/module.exports`
-2. Dos archivos de conexión a MongoDB (`server.js` y `db.js`)
-3. Diferentes nombres de base de datos (`triviaapp` vs `mi_base_datos`)
-
-### **Frontend Incompleto**:
-
+#### **Frontend Incompleto**:
 1. Sin estilos CSS
 2. Sin páginas para usar trivias
-3. Código JavaScript minificado
+3. Código JavaScript necesita mejoras
 4. Falta navegación entre páginas
 
-### **Configuración**:
-
-1. Faltan variables de entorno (`.env`)
-2. Sin manejo de errores robusto
-3. Sin middleware de autenticación para rutas protegidas
-
----
-
-## 🚀 Próximos Pasos Sugeridos
-
-1. **Completar rutas faltantes** (trivia.js, results.js)
-2. **Estandarizar sintaxis** (usar solo ES6 modules)
-3. **Crear archivo .env** con variables de configuración
-4. **Implementar middleware de autenticación**
-5. **Mejorar frontend** (CSS, páginas de trivia)
-6. **Agregar validaciones** y manejo de errores
-7. **Crear documentación de API** (endpoints)
-8. **Tests unitarios** y de integración
+#### **Mejoras Necesarias**:
+1. Validaciones de entrada más robustas
+2. Manejo de errores mejorado
+3. Tests unitarios y de integración
+4. Documentación de API completa
 
 ---
 
-## 📚 Tecnologías Utilizadas
+## Próximos Pasos Sugeridos
+
+1. **Mejorar frontend** (CSS, páginas de trivia)
+2. **Agregar validaciones** y manejo de errores
+3. **Crear documentación de API** (endpoints)
+4. **Tests unitarios** y de integración
+5. **Implementar paginación** en listados
+6. **Agregar filtros** de búsqueda
+7. **Optimizar rendimiento** de consultas
+
+---
+
+## Tecnologías Utilizadas
 
 - **Backend**: Node.js, Express.js, Mongoose
-- **Base de Datos**: MongoDB (local con Docker)
-- **Autenticación**: bcryptjs
+- **Base de Datos**: MongoDB Atlas (cloud)
+- **Autenticación**: JWT + bcryptjs
 - **Email**: Nodemailer (Gmail)
 - **Frontend**: HTML5, CSS3, JavaScript vanilla
-- **Contenedores**: Docker, Docker Compose
+- **Desarrollo**: Nodemon, dotenv

@@ -1,18 +1,18 @@
-# Trivia Lab 🧠
+# Trivia Lab
 
 Una aplicación web de trivia/quiz interactiva que permite a maestros crear cuestionarios y a estudiantes participar en ellos con verificación por email y sistema de roles.
 
-## ✨ Características
+## Características
 
-- 🔐 **Autenticación completa** con verificación por email
-- 👥 **Sistema de roles** (Maestro/Estudiante)
-- 📝 **Gestión de trivias** para maestros
-- 🎯 **Participación en tiempo real** para estudiantes
-- 📊 **Sistema de resultados y estadísticas**
-- 🔑 **Códigos únicos** para acceder a trivias
-- 📱 **Interfaz responsive** (HTML/CSS/JS vanilla)
+- **Autenticación completa** con verificación por email
+- **Sistema de roles** (Maestro/Estudiante)
+- **Gestión de trivias** para maestros
+- **Participación en tiempo real** para estudiantes
+- **Sistema de resultados y estadísticas**
+- **Códigos únicos** para acceder a trivias
+- **Interfaz responsive** (HTML/CSS/JS vanilla)
 
-## 🛠️ Tecnologías
+## Tecnologías
 
 ### Backend
 - **Node.js** con Express.js
@@ -26,7 +26,7 @@ Una aplicación web de trivia/quiz interactiva que permite a maestros crear cues
 - **HTML5, CSS3, JavaScript vanilla**
 - **Fetch API** para comunicación con backend
 
-## 🚀 Instalación y Configuración
+## Instalación y Configuración
 
 ### 1. Clonar el repositorio
 ```bash
@@ -78,7 +78,7 @@ FRONTEND_URL=http://localhost:3000
 2. Generar una "App Password"
 3. Usar esa contraseña en `EMAIL_PASS`
 
-## 🏃‍♂️ Ejecución
+## Ejecución
 
 ### Modo Desarrollo
 ```bash
@@ -97,7 +97,7 @@ npm run seed
 
 El servidor se ejecutará en `http://localhost:5000`
 
-## 📚 API Endpoints
+## API Endpoints
 
 ### Autenticación
 - `POST /api/auth/register` - Registro de usuarios
@@ -119,7 +119,7 @@ El servidor se ejecutará en `http://localhost:5000`
 - `GET /api/results/trivia/:triviaId` - Resultados de trivia (maestros)
 - `GET /api/results/:resultId/detail` - Detalle de resultado
 
-## 🔐 Autenticación
+## Autenticación
 
 La API usa **JWT (JSON Web Tokens)** para autenticación. Incluir el token en el header:
 
@@ -127,7 +127,7 @@ La API usa **JWT (JSON Web Tokens)** para autenticación. Incluir el token en el
 Authorization: Bearer <token>
 ```
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 trivia-app-clean/
@@ -145,7 +145,7 @@ trivia-app-clean/
 └── README.md         # Este archivo
 ```
 
-## 🎯 Flujo de Uso
+## Flujo de Uso
 
 ### Para Maestros:
 1. Registrarse y verificar email
@@ -161,7 +161,7 @@ trivia-app-clean/
 4. Responder preguntas
 5. Ver resultados obtenidos
 
-## 🤝 Contribuir
+## Contribuir
 
 1. Fork el proyecto
 2. Crear feature branch (`git checkout -b feature/amazing-feature`)
@@ -169,15 +169,15 @@ trivia-app-clean/
 4. Push al branch (`git push origin feature/amazing-feature`)
 5. Abrir Pull Request
 
-## 📝 Licencia
+## Licencia
 
 Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
 
-## 👥 Autores
+## Autores
 
 - **Ángel Rodríguez** - [AngRodSt](https://github.com/AngRodSt)
 
-## 🙏 Reconocimientos
+## Reconocimientos
 
 - MongoDB Atlas por la base de datos gratuita
 - Nodemailer por el servicio de emails
