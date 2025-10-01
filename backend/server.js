@@ -5,9 +5,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
 
-import authRoutes from "./routes/auth";
-import triviaRoutes from "./routes/trivia";
-import resultsRoutes from "./routes/results";
+import authRoutes from "./routes/auth.js";
+import triviaRoutes from "./routes/trivia.js";
+import resultsRoutes from "./routes/results.js";
 
 const app = express();
 app.use(cors());
@@ -16,16 +16,16 @@ app.use(json());
 // Conexión Mongo con async/await
 async function startServer() {
   try {
-    await connect(process.env.MONGO_URI || "mongodb://localhost:27017/triviaapp", {
+    await connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
     });
-    console.log("✅ MongoDB conectado");
+    console.log("MongoDB conectado");
 
     const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => console.log(`🚀 Servidor corriendo en puerto ${PORT}`));
+    app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
   } catch (err) {
-    console.error("❌ Error conectando a MongoDB:", err);
+    console.error("Error conectando a MongoDB:", err);
     process.exit(1);
   }
 }

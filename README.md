@@ -15,6 +15,7 @@ Una aplicación web de trivia/quiz interactiva que permite a maestros crear cues
 ## Tecnologías
 
 ### Backend
+
 - **Node.js** con Express.js
 - **MongoDB Atlas** (Base de datos en la nube)
 - **Mongoose** (ODM)
@@ -23,28 +24,33 @@ Una aplicación web de trivia/quiz interactiva que permite a maestros crear cues
 - **bcryptjs** (Encriptación de contraseñas)
 
 ### Frontend
+
 - **HTML5, CSS3, JavaScript vanilla**
 - **Fetch API** para comunicación con backend
 
 ## Instalación y Configuración
 
 ### 1. Clonar el repositorio
+
 ```bash
 git clone git@github.com:AngRodSt/Trivia-Lab.git
 cd Trivia-Lab
 ```
 
 ### 2. Instalar dependencias
+
 ```bash
 npm install
 ```
 
 ### 3. Configurar variables de entorno
+
 ```bash
 cp .env.example .env
 ```
 
 Editar `.env` con tus credenciales:
+
 ```env
 # MongoDB Atlas
 MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/triviaapp?retryWrites=true&w=majority
@@ -81,16 +87,19 @@ FRONTEND_URL=http://localhost:3000
 ## Ejecución
 
 ### Modo Desarrollo
+
 ```bash
 npm run dev
 ```
 
 ### Modo Producción
+
 ```bash
 npm start
 ```
 
 ### Poblar base de datos con datos de prueba
+
 ```bash
 npm run seed
 ```
@@ -100,21 +109,25 @@ El servidor se ejecutará en `http://localhost:5000`
 ## API Endpoints
 
 ### Autenticación
+
 - `POST /api/auth/register` - Registro de usuarios
 - `POST /api/auth/login` - Inicio de sesión
 - `POST /api/auth/verify` - Verificar email con código
 
 ### Trivias (Maestros)
+
 - `POST /api/trivia/create` - Crear nueva trivia
 - `GET /api/trivia/my-trivias` - Obtener trivias del maestro
 - `POST /api/trivia/:id/questions` - Agregar pregunta a trivia
 - `PATCH /api/trivia/:id/toggle` - Activar/Desactivar trivia
 
 ### Participación (Estudiantes)
+
 - `GET /api/trivia/join/:code` - Unirse a trivia por código
 - `POST /api/results/submit` - Enviar respuestas
 
 ### Resultados
+
 - `GET /api/results/my-results` - Resultados del estudiante
 - `GET /api/results/trivia/:triviaId` - Resultados de trivia (maestros)
 - `GET /api/results/:resultId/detail` - Detalle de resultado
@@ -148,6 +161,7 @@ trivia-app-clean/
 ## Flujo de Uso
 
 ### Para Maestros:
+
 1. Registrarse y verificar email
 2. Iniciar sesión
 3. Crear trivias con preguntas
@@ -155,6 +169,7 @@ trivia-app-clean/
 5. Ver resultados y estadísticas
 
 ### Para Estudiantes:
+
 1. Registrarse y verificar email
 2. Iniciar sesión
 3. Unirse a trivia con código
