@@ -37,8 +37,8 @@ const JoinTriviaByCode = () => {
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
       <div className="text-center mb-6">
-        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-          <Hash className="w-6 h-6 text-blue-600" />
+        <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+          <Hash className="w-6 h-6 text-amber-600" />
         </div>
         <h2 className="text-xl font-semibold text-gray-900 mb-2">
           Únete con Código
@@ -72,7 +72,7 @@ const JoinTriviaByCode = () => {
               setError("");
             }}
             placeholder="Ej: 123456"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-lg font-mono"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-center text-lg font-mono"
             maxLength={6}
           />
         </div>
@@ -80,7 +80,7 @@ const JoinTriviaByCode = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-black hover:bg-amber-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {loading ? (
             <>

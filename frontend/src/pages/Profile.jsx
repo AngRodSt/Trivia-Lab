@@ -29,73 +29,16 @@ const Profile = () => {
     try {
       setLoading(true);
       if (user?._id) {
-        const results = await resultsAPI.getUserResults(user._id);
-        setRecentResults(results);
-
-        // Calculate user stats
-        const stats = calculateStats(results);
+        // Usar getMyStats en lugar de calcular manualmente
+        const stats = await resultsAPI.getMyStats();
         setUserStats(stats);
+        setRecentResults(stats.recentActivity || []);
       }
     } catch (error) {
       console.error("Error loading user data:", error);
     } finally {
       setLoading(false);
     }
-  };
-
-  const calculateStats = (results) => {
-    if (!results || results.length === 0) {
-      return {
-        totalTrivias: 0,
-        totalScore: 0,
-        averageScore: 0,
-        bestScore: 0,
-        totalTime: 0,
-        streak: 0,
-      };
-    }
-
-    const totalTrivias = results.length;
-    const totalScore = results.reduce((sum, result) => sum + result.score, 0);
-    const averageScore = Math.round(totalScore / totalTrivias);
-    const bestScore = Math.max(...results.map((result) => result.score));
-    const totalTime = results.reduce(
-      (sum, result) => sum + (result.timeSpent || 0),
-      0
-    );
-
-    // Calculate streak (consecutive days with completed trivias)
-    const dates = results.map((result) =>
-      new Date(result.createdAt).toDateString()
-    );
-    const uniqueDates = [...new Set(dates)].sort();
-    let streak = 0;
-    const today = new Date().toDateString();
-
-    if (uniqueDates.includes(today)) {
-      streak = 1;
-      for (let i = uniqueDates.length - 2; i >= 0; i--) {
-        const currentDate = new Date(uniqueDates[i + 1]);
-        const prevDate = new Date(uniqueDates[i]);
-        const diffTime = Math.abs(currentDate - prevDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-        if (diffDays === 1) {
-          streak++;
-        } else {
-          break;
-        }
-      }
-    }
-
-    return {
-      totalTrivias,
-      totalScore,
-      averageScore,
-      bestScore,
-      totalTime,
-      streak,
-    };
   };
 
   const formatTime = (minutes) => {
@@ -172,7 +115,7 @@ const Profile = () => {
                     user?.role === "admin"
                       ? "bg-red-100 text-red-800"
                       : user?.role === "facilitator"
-                      ? "bg-blue-100 text-blue-800"
+                      ? "bg-amber-100 text-amber-800"
                       : "bg-green-100 text-green-800"
                   }`}
                 >
@@ -200,13 +143,13 @@ const Profile = () => {
                     Miembro desde {formatDate(user?.createdAt || new Date())}
                   </span>
                 </div>
-                {userStats?.streak > 0 && (
+                {userStats?.globalRank && (
                   <div className="flex items-center space-x-2">
                     <div className="p-1 bg-amber-100 rounded">
-                      <TrendingUp className="w-4 h-4 text-amber-600" />
+                      <Trophy className="w-4 h-4 text-amber-600" />
                     </div>
                     <span className="font-medium text-amber-700">
-                      {userStats.streak} días consecutivos
+                      Posición global #{userStats.globalRank}
                     </span>
                   </div>
                 )}
@@ -227,7 +170,7 @@ const Profile = () => {
                   Trivias Completadas
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {userStats?.totalTrivias || 0}
+                  {userStats?.triviasCompleted || 0}
                 </p>
               </div>
             </div>
@@ -272,10 +215,10 @@ const Profile = () => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">
-                  Tiempo Total
+                  Promedio de Puntuación
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {formatTime(userStats?.totalTime || 0)}
+                  {userStats?.averageScore?.toFixed(1) || "0.0"}
                 </p>
               </div>
             </div>
@@ -318,7 +261,7 @@ const Profile = () => {
                         {result.trivia?.title || "Trivia"}
                       </h4>
                       <div className="flex items-center space-x-4 text-sm text-gray-500">
-                        <span>{formatDate(result.createdAt)}</span>
+                        <span>{formatDate(result.completedAt)}</span>
                         <span>•</span>
                         <span>
                           {result.correctAnswers || 0} de{" "}
@@ -356,19 +299,6 @@ const Profile = () => {
             </div>
           )}
         </div>
-
-        {/* Performance Chart Placeholder */}
-        {userStats?.totalTrivias > 0 && (
-          <div className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Progreso
-            </h3>
-            <div className="text-center py-8 text-gray-500">
-              <TrendingUp className="w-12 h-12 mx-auto mb-2 text-gray-400" />
-              <p>Gráfico de progreso próximamente</p>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

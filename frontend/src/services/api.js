@@ -142,6 +142,12 @@ export const resultsAPI = {
     const response = await api.get(`/results/user-stats/${userId}`);
     return response.data;
   },
+
+  // Obtener resultados del usuario (para el perfil)
+  getUserResults: async (userId) => {
+    const response = await api.get(`/results/my-results`);
+    return response.data;
+  },
 };
 
 export default api;

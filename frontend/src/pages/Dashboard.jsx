@@ -49,7 +49,6 @@ const Dashboard = () => {
       setLoading(true);
       const response = await api.get("/trivia/my-trivias");
       setTrivias(response.data);
-      console.log("Trivias cargadas:", response.data);
     } catch (error) {
       console.error("Error fetching trivias:", error);
       console.error("Error details:", error.response?.data || error.message);
@@ -222,8 +221,8 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-sm">
             <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <BarChart3 className="w-6 h-6 text-blue-600" />
+              <div className="p-2 bg-amber-100 rounded-lg">
+                <BarChart3 className="w-6 h-6 text-amber-600" />
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">
@@ -250,8 +249,8 @@ const Dashboard = () => {
           </div>
           <div className="bg-white p-6 rounded-lg shadow-sm">
             <div className="flex items-center">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <Users className="w-6 h-6 text-purple-600" />
+              <div className="p-2 bg-gray-800 rounded-lg">
+                <Users className="w-6 h-6 text-white" />
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">
@@ -315,7 +314,7 @@ const Dashboard = () => {
                           <span
                             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                               trivia.isPublic
-                                ? "bg-blue-100 text-blue-800"
+                                ? "bg-amber-100 text-amber-800"
                                 : "bg-gray-100 text-gray-800"
                             }`}
                           >
@@ -346,7 +345,7 @@ const Dashboard = () => {
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => fetchTriviaResults(trivia._id)}
-                        className="inline-flex items-center px-3 py-1.5 text-sm bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
+                        className="inline-flex items-center px-3 py-1.5 text-sm bg-amber-50 text-amber-600 hover:bg-amber-100 rounded-lg transition-colors"
                       >
                         <BarChart3 className="w-4 h-4 mr-1" />
                         Resultados
@@ -363,7 +362,7 @@ const Dashboard = () => {
                         className={`inline-flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors ${
                           trivia.isActive
                             ? "bg-red-50 text-red-600 hover:bg-red-100"
-                            : "bg-green-50 text-green-600 hover:bg-green-100"
+                            : "bg-gray-50 text-gray-700 hover:bg-gray-100"
                         }`}
                       >
                         {trivia.isActive ? (
@@ -415,16 +414,16 @@ const Dashboard = () => {
                   <>
                     {/* Summary */}
                     <div className="grid grid-cols-3 gap-4 mb-6">
-                      <div className="text-center p-4 bg-blue-50 rounded-lg">
-                        <p className="text-2xl font-bold text-blue-600">
+                      <div className="text-center p-4 bg-amber-50 rounded-lg">
+                        <p className="text-2xl font-bold text-amber-600">
                           {triviaResults.summary.totalParticipants}
                         </p>
                         <p className="text-sm text-gray-600">
                           Total Participantes
                         </p>
                       </div>
-                      <div className="text-center p-4 bg-green-50 rounded-lg">
-                        <p className="text-2xl font-bold text-green-600">
+                      <div className="text-center p-4 bg-gray-50 rounded-lg">
+                        <p className="text-2xl font-bold text-gray-700">
                           {triviaResults.summary.completedParticipants}
                         </p>
                         <p className="text-sm text-gray-600">Completaron</p>
@@ -479,7 +478,7 @@ const Dashboard = () => {
                                 <span
                                   className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                                     result.percentage >= 70
-                                      ? "bg-green-100 text-green-800"
+                                      ? "bg-amber-100 text-amber-800"
                                       : result.percentage >= 50
                                       ? "bg-yellow-100 text-yellow-800"
                                       : "bg-red-100 text-red-800"
@@ -513,7 +512,7 @@ const Dashboard = () => {
         {/* Create Trivia Modal */}
         {showCreateForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-hidden">
+            <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
               <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-gray-900">
                   Crear Nueva Trivia
@@ -526,198 +525,197 @@ const Dashboard = () => {
                 </button>
               </div>
 
-              <form
-                onSubmit={handleCreateTrivia}
-                className="p-6 overflow-y-auto"
-              >
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Título de la Trivia
-                    </label>
-                    <input
-                      type="text"
-                      value={newTrivia.title}
-                      onChange={(e) =>
-                        setNewTrivia((prev) => ({
-                          ...prev,
-                          title: e.target.value,
-                        }))
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Descripción
-                    </label>
-                    <textarea
-                      value={newTrivia.description}
-                      onChange={(e) =>
-                        setNewTrivia((prev) => ({
-                          ...prev,
-                          description: e.target.value,
-                        }))
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-                      rows={3}
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Dificultad
-                    </label>
-                    <select
-                      value={newTrivia.difficulty}
-                      onChange={(e) =>
-                        setNewTrivia((prev) => ({
-                          ...prev,
-                          difficulty: e.target.value,
-                        }))
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-                    >
-                      <option value="easy">Fácil</option>
-                      <option value="medium">Medio</option>
-                      <option value="hard">Difícil</option>
-                    </select>
-                  </div>
-
-                  {/* Questions */}
-                  <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <label className="block text-sm font-medium text-gray-700">
-                        Preguntas ({newTrivia.questions.length})
+              <div className="flex-1 overflow-y-auto">
+                <form onSubmit={handleCreateTrivia} className="p-6">
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Título de la Trivia
                       </label>
-                    </div>
-
-                    {/* Add Question Form */}
-                    <div className="border border-gray-200 rounded-lg p-4 mb-4">
                       <input
                         type="text"
-                        placeholder="Texto de la pregunta"
-                        value={newQuestion.text}
+                        value={newTrivia.title}
                         onChange={(e) =>
-                          setNewQuestion((prev) => ({
+                          setNewTrivia((prev) => ({
                             ...prev,
-                            text: e.target.value,
+                            title: e.target.value,
                           }))
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg mb-3"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                        required
                       />
-
-                      <div className="grid grid-cols-2 gap-2 mb-3">
-                        {newQuestion.options.map((option, index) => (
-                          <input
-                            key={index}
-                            type="text"
-                            placeholder={`Opción ${index + 1}`}
-                            value={option}
-                            onChange={(e) => {
-                              const newOptions = [...newQuestion.options];
-                              newOptions[index] = e.target.value;
-                              setNewQuestion((prev) => ({
-                                ...prev,
-                                options: newOptions,
-                              }));
-                            }}
-                            className="px-3 py-2 border border-gray-300 rounded-lg"
-                          />
-                        ))}
-                      </div>
-
-                      <div className="flex space-x-3 mb-3">
-                        <select
-                          value={newQuestion.correctAnswer}
-                          onChange={(e) =>
-                            setNewQuestion((prev) => ({
-                              ...prev,
-                              correctAnswer: parseInt(e.target.value),
-                            }))
-                          }
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
-                        >
-                          <option value="">
-                            Selecciona la respuesta correcta
-                          </option>
-                          {newQuestion.options.map((option, index) => (
-                            <option key={index} value={index}>
-                              {index + 1}. {option || `Opción ${index + 1}`}
-                            </option>
-                          ))}
-                        </select>
-                        <input
-                          type="text"
-                          placeholder="Categoría"
-                          value={newQuestion.category}
-                          onChange={(e) =>
-                            setNewQuestion((prev) => ({
-                              ...prev,
-                              category: e.target.value,
-                            }))
-                          }
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
-                        />
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={addQuestion}
-                        className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                      >
-                        Agregar Pregunta
-                      </button>
                     </div>
 
-                    {/* Questions List */}
-                    {newTrivia.questions.length > 0 && (
-                      <div className="space-y-2">
-                        {newTrivia.questions.map((question, index) => (
-                          <div
-                            key={index}
-                            className="border border-gray-200 rounded-lg p-3 flex justify-between items-start"
-                          >
-                            <div className="flex-1">
-                              <p className="font-medium">{question.text}</p>
-                              <p className="text-sm text-gray-600">
-                                Respuesta:{" "}
-                                {question.options[question.correctAnswer]}{" "}
-                                (Opción {question.correctAnswer + 1})
-                              </p>
-                            </div>
-                            <button
-                              type="button"
-                              onClick={() => removeQuestion(index)}
-                              className="text-red-500 hover:text-red-700"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Descripción
+                      </label>
+                      <textarea
+                        value={newTrivia.description}
+                        onChange={(e) =>
+                          setNewTrivia((prev) => ({
+                            ...prev,
+                            description: e.target.value,
+                          }))
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                        rows={3}
+                      />
+                    </div>
 
-                <div className="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-200">
-                  <button
-                    type="button"
-                    onClick={() => setShowCreateForm(false)}
-                    className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600"
-                  >
-                    Crear Trivia
-                  </button>
-                </div>
-              </form>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Dificultad
+                      </label>
+                      <select
+                        value={newTrivia.difficulty}
+                        onChange={(e) =>
+                          setNewTrivia((prev) => ({
+                            ...prev,
+                            difficulty: e.target.value,
+                          }))
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                      >
+                        <option value="easy">Fácil</option>
+                        <option value="medium">Medio</option>
+                        <option value="hard">Difícil</option>
+                      </select>
+                    </div>
+
+                    {/* Questions */}
+                    <div>
+                      <div className="flex items-center justify-between mb-3">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Preguntas ({newTrivia.questions.length})
+                        </label>
+                      </div>
+
+                      {/* Add Question Form */}
+                      <div className="border border-gray-200 rounded-lg p-4 mb-4">
+                        <input
+                          type="text"
+                          placeholder="Texto de la pregunta"
+                          value={newQuestion.text}
+                          onChange={(e) =>
+                            setNewQuestion((prev) => ({
+                              ...prev,
+                              text: e.target.value,
+                            }))
+                          }
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg mb-3"
+                        />
+
+                        <div className="grid grid-cols-2 gap-2 mb-3">
+                          {newQuestion.options.map((option, index) => (
+                            <input
+                              key={index}
+                              type="text"
+                              placeholder={`Opción ${index + 1}`}
+                              value={option}
+                              onChange={(e) => {
+                                const newOptions = [...newQuestion.options];
+                                newOptions[index] = e.target.value;
+                                setNewQuestion((prev) => ({
+                                  ...prev,
+                                  options: newOptions,
+                                }));
+                              }}
+                              className="px-3 py-2 border border-gray-300 rounded-lg"
+                            />
+                          ))}
+                        </div>
+
+                        <div className="flex space-x-3 mb-3">
+                          <select
+                            value={newQuestion.correctAnswer}
+                            onChange={(e) =>
+                              setNewQuestion((prev) => ({
+                                ...prev,
+                                correctAnswer: parseInt(e.target.value),
+                              }))
+                            }
+                            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
+                          >
+                            <option value="">
+                              Selecciona la respuesta correcta
+                            </option>
+                            {newQuestion.options.map((option, index) => (
+                              <option key={index} value={index}>
+                                {index + 1}. {option || `Opción ${index + 1}`}
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            type="text"
+                            placeholder="Categoría"
+                            value={newQuestion.category}
+                            onChange={(e) =>
+                              setNewQuestion((prev) => ({
+                                ...prev,
+                                category: e.target.value,
+                              }))
+                            }
+                            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
+                          />
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={addQuestion}
+                          className="w-full px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600"
+                        >
+                          Agregar Pregunta
+                        </button>
+                      </div>
+
+                      {/* Questions List */}
+                      {newTrivia.questions.length > 0 && (
+                        <div className="space-y-2">
+                          {newTrivia.questions.map((question, index) => (
+                            <div
+                              key={index}
+                              className="border border-gray-200 rounded-lg p-3 flex justify-between items-start"
+                            >
+                              <div className="flex-1">
+                                <p className="font-medium">{question.text}</p>
+                                <p className="text-sm text-gray-600">
+                                  Respuesta:{" "}
+                                  {question.options[question.correctAnswer]}{" "}
+                                  (Opción {question.correctAnswer + 1})
+                                </p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => removeQuestion(index)}
+                                className="text-red-500 hover:text-red-700"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <div className="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3 bg-white">
+                <button
+                  type="button"
+                  onClick={() => setShowCreateForm(false)}
+                  className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleCreateTrivia}
+                  className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600"
+                >
+                  Crear Trivia
+                </button>
+              </div>
             </div>
           </div>
         )}
