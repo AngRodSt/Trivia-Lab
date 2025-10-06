@@ -18,6 +18,8 @@ const TriviaSchema = new mongoose.Schema(
     },
     questions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Question" }],
     isActive: { type: Boolean, default: true },
+    isPublic: { type: Boolean, default: false }, // Solo trivias públicas aparecen en la lista general
+    allowDownloadResults: { type: Boolean, default: true }, // Permitir descargar resultados
   },
   { timestamps: true }
 );

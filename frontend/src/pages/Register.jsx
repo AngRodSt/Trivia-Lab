@@ -9,6 +9,8 @@ import {
   User,
   AlertCircle,
   CheckCircle,
+  UserCheck,
+  GraduationCap,
 } from "lucide-react";
 
 const Register = () => {
@@ -17,6 +19,7 @@ const Register = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    role: "user", // Por defecto estudiante
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -78,6 +81,7 @@ const Register = () => {
         name: formData.name.trim(),
         email: formData.email.toLowerCase().trim(),
         password: formData.password,
+        role: formData.role,
       });
       navigate("/", { replace: true });
     } catch (error) {
@@ -125,11 +129,18 @@ const Register = () => {
   const passwordStrength = getPasswordStrength();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-amber-400 mb-2">TriviaLab</h1>
+          <div className="flex items-center justify-center mb-4">
+            <img
+              src="/logo.JPG"
+              alt="Trivia Lab Logo"
+              className="w-24 h-24 mr-3"
+            />
+            <h1 className="text-4xl font-bold text-amber-600">TriviaLab</h1>
+          </div>
           <h2 className="text-2xl font-semibold text-gray-900">Crear Cuenta</h2>
           <p className="mt-2 text-sm text-gray-600">
             Únete y comienza a jugar trivias
@@ -179,6 +190,49 @@ const Register = () => {
                   {validationErrors.name}
                 </p>
               )}
+            </div>
+
+            {/* Role Selection */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Tipo de Usuario
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormData((prev) => ({ ...prev, role: "user" }))
+                  }
+                  className={`flex items-center justify-center p-4 border-2 rounded-lg transition-all ${
+                    formData.role === "user"
+                      ? "border-amber-500 bg-amber-50 text-amber-700"
+                      : "border-gray-300 hover:border-gray-400"
+                  }`}
+                >
+                  <UserCheck className="w-5 h-5 mr-2" />
+                  <div className="text-left">
+                    <div className="font-medium">Estudiante</div>
+                    <div className="text-xs text-gray-500">Jugar trivias</div>
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormData((prev) => ({ ...prev, role: "facilitator" }))
+                  }
+                  className={`flex items-center justify-center p-4 border-2 rounded-lg transition-all ${
+                    formData.role === "facilitator"
+                      ? "border-amber-500 bg-amber-50 text-amber-700"
+                      : "border-gray-300 hover:border-gray-400"
+                  }`}
+                >
+                  <GraduationCap className="w-5 h-5 mr-2" />
+                  <div className="text-left">
+                    <div className="font-medium">Facilitador</div>
+                    <div className="text-xs text-gray-500">Crear trivias</div>
+                  </div>
+                </button>
+              </div>
             </div>
 
             {/* Email */}

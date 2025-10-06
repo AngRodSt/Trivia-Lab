@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useTrivia } from "../hooks/useTrivia";
 import { useAuth } from "../hooks/useAuth";
 import { resultsAPI } from "../services/api";
+import JoinTriviaByCode from "../components/JoinTriviaByCode";
 import {
   Play,
   Clock,
@@ -40,7 +41,7 @@ const Home = () => {
   const { trivias, loading, error, loadTrivias } = useTrivia();
   const { user } = useAuth();
   const navigate = useNavigate();
-  console.log("Trivias cargadas:", trivias);
+
   useEffect(() => {
     loadTrivias();
     loadUserStats();
@@ -79,13 +80,6 @@ const Home = () => {
   ];
 
   const filteredTrivias = trivias.filter((trivia) => {
-    // Debug: Log trivia data to check structure
-    if (trivias.length > 0 && trivias.indexOf(trivia) === 0) {
-      console.log("Primera trivia para debug:", trivia);
-      console.log("Dificultad:", trivia.difficulty);
-      console.log("Categorías:", trivia.categories);
-    }
-
     const matchesSearch =
       trivia.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       trivia.description?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -189,18 +183,25 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br bg-white py-8">
       <div className="max-w-full mx-auto px-6 sm:px-8 lg:px-12 xl:px-20">
         {/* Welcome Section */}
         <div className="mb-12 text-center">
           <div className="flex items-center justify-center mb-6">
-            <div className="p-3 bg-blue-100 rounded-full mr-4">
-              <Users className="w-8 h-8 text-black" />
+            <div className="flex items-center mr-4">
+              <img
+                src="/logo.JPG"
+                alt="Trivia Lab Logo"
+                className="w-24 h-24 mr-3"
+              />
+              <span className="text-4xl font-bold text-amber-600">
+                TriviaLab
+              </span>
             </div>
-            <h1 className="text-4xl font-bold text-gray-900">
-              Bienvenido, {user?.name || "Usuario"}
-            </h1>
           </div>
+          <h1 className="text-2xl font-semibold text-gray-900 mb-2">
+            Bienvenido, {user?.name || "Usuario"}
+          </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Desafía tu conocimiento con nuestras trivias interactivas y compite
             con otros jugadores
@@ -270,6 +271,13 @@ const Home = () => {
             </div>
           </div>
         </div>
+
+        {/* Join by Code Section - Only for regular users */}
+        {user?.role === "user" && (
+          <div className="mb-12">
+            <JoinTriviaByCode />
+          </div>
+        )}
 
         {/* Filters and Search */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 mb-12">

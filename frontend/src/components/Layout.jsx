@@ -1,6 +1,6 @@
 import React from "react";
 import { useAuth } from "../hooks/useAuth";
-import { LogOut, User, Home, Trophy, Settings } from "lucide-react";
+import { LogOut, User, Home, Trophy, Settings, BarChart3 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Layout = ({ children }) => {
@@ -56,6 +56,19 @@ const Layout = ({ children }) => {
                 <Trophy className="w-4 h-4 mr-2" />
                 Ranking
               </button>
+              {(user?.role === "admin" || user?.role === "facilitator") && (
+                <button
+                  onClick={() => navigate("/dashboard")}
+                  className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    isActive("/dashboard")
+                      ? "text-black bg-amber-50"
+                      : "text-gray-600 hover:text-black hover:bg-amber-50"
+                  }`}
+                >
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  Dashboard
+                </button>
+              )}
               <button
                 onClick={() => navigate("/profile")}
                 className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
@@ -91,7 +104,7 @@ const Layout = ({ children }) => {
 
           {/* Mobile Navigation */}
           <div className="md:hidden pb-4">
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 flex-wrap">
               <button
                 onClick={() => navigate("/")}
                 className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
@@ -114,6 +127,19 @@ const Layout = ({ children }) => {
                 <Trophy className="w-4 h-4 mr-2" />
                 Ranking
               </button>
+              {(user?.role === "admin" || user?.role === "facilitator") && (
+                <button
+                  onClick={() => navigate("/dashboard")}
+                  className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    isActive("/dashboard")
+                      ? "text-black bg-amber-50"
+                      : "text-gray-600 hover:text-black hover:bg-amber-50"
+                  }`}
+                >
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  Dashboard
+                </button>
+              )}
               <button
                 onClick={() => navigate("/profile")}
                 className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${

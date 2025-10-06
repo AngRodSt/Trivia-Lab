@@ -119,7 +119,7 @@ router.get("/user-stats/:userId", authenticateToken, async (req, res) => {
     const { userId } = req.params;
 
     // Verificar que el usuario puede ver estas estadísticas
-    if (req.user.id !== userId && req.user.role !== "admin") {
+    if (req.user._id.toString() !== userId && req.user.role !== "admin") {
       return res
         .status(403)
         .json({ error: "No tienes permisos para ver estas estadísticas" });
@@ -128,7 +128,14 @@ router.get("/user-stats/:userId", authenticateToken, async (req, res) => {
     const results = await Result.find({
       user: userId,
       completedAt: { $ne: null },
-    }).populate("trivia", "title");
+    }).populate({
+      path: "trivia",
+      select: "title questions",
+      populate: {
+        path: "questions",
+        select: "_id",
+      },
+    });
 
     if (results.length === 0) {
       return res.json({
@@ -148,12 +155,29 @@ router.get("/user-stats/:userId", authenticateToken, async (req, res) => {
     const recentActivity = results
       .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt))
       .slice(0, 5)
-      .map((result) => ({
-        trivia: result.trivia,
-        score: result.score,
-        completedAt: result.completedAt,
-        percentage: Math.round((result.score / result.answers.length) * 100),
-      }));
+      .map((result) => {
+        const totalQuestions = result.trivia.questions
+          ? result.trivia.questions.length
+          : 0;
+        const correctAnswers = result.answers
+          ? result.answers.filter((a) => a.isCorrect).length
+          : 0;
+
+        return {
+          trivia: {
+            _id: result.trivia._id,
+            title: result.trivia.title,
+          },
+          score: result.score,
+          completedAt: result.completedAt,
+          totalQuestions,
+          correctAnswers,
+          percentage:
+            totalQuestions > 0
+              ? Math.round((correctAnswers / totalQuestions) * 100)
+              : 0,
+        };
+      });
 
     res.json({
       triviasCompleted: results.length,
@@ -171,9 +195,16 @@ router.get("/user-stats/:userId", authenticateToken, async (req, res) => {
 router.get("/my-stats", authenticateToken, async (req, res) => {
   try {
     const results = await Result.find({
-      user: req.user.id,
+      user: req.user._id,
       completedAt: { $ne: null },
-    }).populate("trivia", "title");
+    }).populate({
+      path: "trivia",
+      select: "title questions",
+      populate: {
+        path: "questions",
+        select: "_id",
+      },
+    });
 
     if (results.length === 0) {
       return res.json({
@@ -214,12 +245,29 @@ router.get("/my-stats", authenticateToken, async (req, res) => {
     const recentActivity = results
       .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt))
       .slice(0, 5)
-      .map((result) => ({
-        trivia: result.trivia,
-        score: result.score,
-        completedAt: result.completedAt,
-        percentage: Math.round((result.score / result.answers.length) * 100),
-      }));
+      .map((result) => {
+        const totalQuestions = result.trivia.questions
+          ? result.trivia.questions.length
+          : 0;
+        const correctAnswers = result.answers
+          ? result.answers.filter((a) => a.isCorrect).length
+          : 0;
+
+        return {
+          trivia: {
+            _id: result.trivia._id,
+            title: result.trivia.title,
+          },
+          score: result.score,
+          completedAt: result.completedAt,
+          totalQuestions,
+          correctAnswers,
+          percentage:
+            totalQuestions > 0
+              ? Math.round((correctAnswers / totalQuestions) * 100)
+              : 0,
+        };
+      });
 
     res.json({
       triviasCompleted: results.length,
@@ -237,10 +285,10 @@ router.get("/my-stats", authenticateToken, async (req, res) => {
 // Enviar respuestas de una trivia
 router.post("/submit", authenticateToken, async (req, res) => {
   try {
-    if (req.user.role !== "estudiante") {
+    if (!["user"].includes(req.user.role)) {
       return res
         .status(403)
-        .json({ error: "Solo los estudiantes pueden enviar respuestas" });
+        .json({ error: "Solo los usuarios pueden enviar respuestas" });
     }
 
     const { triviaId, answers } = req.body; // answers: [{ questionId, selectedAnswer }]
@@ -304,10 +352,10 @@ router.post("/submit", authenticateToken, async (req, res) => {
 // Obtener resultados del estudiante
 router.get("/my-results", authenticateToken, async (req, res) => {
   try {
-    if (req.user.role !== "estudiante") {
+    if (!["user"].includes(req.user.role)) {
       return res
         .status(403)
-        .json({ error: "Solo los estudiantes pueden ver sus resultados" });
+        .json({ error: "Solo los usuarios pueden ver sus resultados" });
     }
 
     const results = await Result.find({ user: req.user.id })
@@ -335,10 +383,11 @@ router.get("/my-results", authenticateToken, async (req, res) => {
 // Obtener resultados de una trivia específica (para maestros)
 router.get("/trivia/:triviaId", authenticateToken, async (req, res) => {
   try {
-    if (req.user.role !== "maestro") {
-      return res
-        .status(403)
-        .json({ error: "Solo los maestros pueden ver resultados de trivias" });
+    if (!["facilitator", "admin"].includes(req.user.role)) {
+      return res.status(403).json({
+        error:
+          "Solo los facilitadores y administradores pueden ver resultados de trivias",
+      });
     }
 
     const { triviaId } = req.params;
@@ -420,7 +469,7 @@ router.get("/:resultId/detail", authenticateToken, async (req, res) => {
     // Verificar permisos: el estudiante solo puede ver sus resultados,
     // el maestro puede ver resultados de sus trivias
     if (
-      req.user.role === "estudiante" &&
+      req.user.role === "user" &&
       result.user._id.toString() !== req.user.id
     ) {
       return res
@@ -428,7 +477,7 @@ router.get("/:resultId/detail", authenticateToken, async (req, res) => {
         .json({ error: "No tienes permisos para ver este resultado" });
     }
 
-    if (req.user.role === "maestro") {
+    if (["facilitator", "admin"].includes(req.user.role)) {
       const trivia = await Trivia.findById(result.trivia._id);
       if (trivia.createdBy.toString() !== req.user.id) {
         return res
