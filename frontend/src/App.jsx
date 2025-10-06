@@ -15,6 +15,7 @@ import Home from "./pages/Home";
 import TriviaGame from "./pages/TriviaGame";
 import Leaderboard from "./pages/Leaderboard";
 import Profile from "./pages/Profile";
+import Dashboard from "./pages/Dashboard";
 import "./App.css";
 
 function App() {
@@ -68,6 +69,17 @@ function App() {
                   <ProtectedRoute>
                     <Layout>
                       <Profile />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <Dashboard />
                     </Layout>
                   </ProtectedRoute>
                 }

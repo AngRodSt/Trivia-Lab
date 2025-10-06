@@ -10,6 +10,9 @@ import {
   TrendingUp,
   Calendar,
   Award,
+  Shield,
+  GraduationCap,
+  UserCheck,
 } from "lucide-react";
 
 const Profile = () => {
@@ -160,6 +163,33 @@ const Profile = () => {
                   <Mail className="w-4 h-4 text-black" />
                 </div>
                 <span>{user?.email}</span>
+              </div>
+
+              {/* Role Badge */}
+              <div className="mb-4">
+                <span
+                  className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                    user?.role === "admin"
+                      ? "bg-red-100 text-red-800"
+                      : user?.role === "facilitator"
+                      ? "bg-blue-100 text-blue-800"
+                      : "bg-green-100 text-green-800"
+                  }`}
+                >
+                  {user?.role === "admin" ? (
+                    <>
+                      <Shield className="w-4 h-4 mr-1" /> Administrador
+                    </>
+                  ) : user?.role === "facilitator" ? (
+                    <>
+                      <GraduationCap className="w-4 h-4 mr-1" /> Facilitador
+                    </>
+                  ) : (
+                    <>
+                      <UserCheck className="w-4 h-4 mr-1" /> Estudiante
+                    </>
+                  )}
+                </span>
               </div>
               <div className="flex items-center space-x-6 text-sm text-gray-500">
                 <div className="flex items-center space-x-2">

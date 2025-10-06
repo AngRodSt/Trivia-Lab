@@ -16,12 +16,20 @@ const generateToken = (userId) => {
 // Registro
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     // Validar datos requeridos
     if (!name || !email || !password) {
       return res.status(400).json({
         message: "Todos los campos son requeridos",
+      });
+    }
+
+    // Validar rol si se proporciona
+    const validRoles = ["user", "facilitator"];
+    if (role && !validRoles.includes(role)) {
+      return res.status(400).json({
+        message: "Rol inválido. Solo se permite 'user' o 'facilitator'",
       });
     }
 
@@ -45,6 +53,7 @@ router.post("/register", async (req, res) => {
       name: name.trim(),
       email: email.toLowerCase().trim(),
       password,
+      role: role || "user", // Usar el rol proporcionado o 'user' por defecto
       isVerified: true, // Por simplicidad, activamos directamente
     });
 

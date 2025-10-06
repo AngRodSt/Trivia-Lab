@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useTrivia } from "../hooks/useTrivia";
 import { useAuth } from "../hooks/useAuth";
 import { resultsAPI } from "../services/api";
+import JoinTriviaByCode from "../components/JoinTriviaByCode";
 import {
   Play,
   Clock,
@@ -270,6 +271,13 @@ const Home = () => {
             </div>
           </div>
         </div>
+
+        {/* Join by Code Section - Only for regular users */}
+        {user?.role === "user" && (
+          <div className="mb-12">
+            <JoinTriviaByCode />
+          </div>
+        )}
 
         {/* Filters and Search */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 mb-12">
