@@ -1,7 +1,6 @@
 import express, { json } from "express";
 import { connect } from "mongoose";
 import cors from "cors";
-// require("dotenv").config();
 import dotenv from "dotenv";
 dotenv.config();
 
