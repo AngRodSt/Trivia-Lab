@@ -53,8 +53,7 @@ Editar `.env` con tus credenciales:
 
 ```env
 # MongoDB Atlas
-MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/triviaapp?retryWrites=true&w=majority
-
+MONGO_URI= tu uri de mongo db
 # Servidor
 PORT=5000
 NODE_ENV=development
