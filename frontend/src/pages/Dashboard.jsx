@@ -29,6 +29,7 @@ const Dashboard = () => {
     title: "",
     description: "",
     difficulty: "easy",
+    timeLimit: "", // Límite de tiempo en minutos
     questions: [],
   });
 
@@ -84,11 +85,10 @@ const Dashboard = () => {
         title: "",
         description: "",
         difficulty: "easy",
+        timeLimit: "",
         questions: [],
       });
     } catch (error) {
-      console.error("Error creating trivia:", error);
-      console.error("Error details:", error.response?.data || error.message);
       alert(
         "Error al crear la trivia: " +
           (error.response?.data?.error || error.message || "Error desconocido")
@@ -332,6 +332,12 @@ const Dashboard = () => {
                       <p className="text-gray-600 mt-1">{trivia.description}</p>
                       <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
                         <span>{trivia.questions.length} preguntas</span>
+                        <span>•</span>
+                        <span>
+                          {trivia.timeLimit
+                            ? `${trivia.timeLimit} min`
+                            : "Sin límite"}
+                        </span>
                         <span>•</span>
                         <span>Código: {trivia.code}</span>
                         <button
@@ -581,6 +587,29 @@ const Dashboard = () => {
                         <option value="medium">Medio</option>
                         <option value="hard">Difícil</option>
                       </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Límite de Tiempo (minutos)
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="180"
+                        value={newTrivia.timeLimit}
+                        onChange={(e) =>
+                          setNewTrivia((prev) => ({
+                            ...prev,
+                            timeLimit: e.target.value,
+                          }))
+                        }
+                        placeholder="Sin límite"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                      />
+                      <p className="text-sm text-gray-500 mt-1">
+                        Deja vacío para trivias sin límite de tiempo
+                      </p>
                     </div>
 
                     {/* Questions */}

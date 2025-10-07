@@ -1,6 +1,5 @@
 import React, {
   createContext,
-  useContext,
   useReducer,
   useEffect,
   useCallback,
@@ -75,16 +74,19 @@ const triviaReducer = (state, action) => {
         error: null,
       };
 
-    case TRIVIA_ACTIONS.START_TRIVIA:
+    case TRIVIA_ACTIONS.START_TRIVIA: {
+      const timeLimit = action.payload.trivia?.timeLimit;
       return {
         ...state,
+        currentTrivia: action.payload.trivia, // Actualizar la trivia actual con los datos completos
         isPlaying: true,
         isCompleted: false,
         currentQuestion: 0,
         answers: [],
         score: 0,
-        timeRemaining: action.payload.timeLimit || null,
+        timeRemaining: timeLimit ? timeLimit * 60 : null, // Convertir minutos a segundos
       };
+    }
 
     case TRIVIA_ACTIONS.NEXT_QUESTION:
       return {
@@ -101,7 +103,7 @@ const triviaReducer = (state, action) => {
         currentQuestion: Math.max(state.currentQuestion - 1, 0),
       };
 
-    case TRIVIA_ACTIONS.SUBMIT_ANSWER:
+    case TRIVIA_ACTIONS.SUBMIT_ANSWER: {
       const newAnswers = [...state.answers];
       const answerIndex = newAnswers.findIndex(
         (answer) => answer.questionId === action.payload.questionId
@@ -118,6 +120,7 @@ const triviaReducer = (state, action) => {
         answers: newAnswers,
         score: action.payload.score || state.score,
       };
+    }
 
     case TRIVIA_ACTIONS.SET_TIME_REMAINING:
       return {

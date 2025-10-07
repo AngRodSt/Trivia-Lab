@@ -405,7 +405,11 @@ const Home = () => {
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center text-sm text-gray-600">
                       <Clock className="w-4 h-4 mr-1.5 text-gray-400" />
-                      <span>Sin límite</span>
+                      <span>
+                        {trivia.timeLimit
+                          ? `${trivia.timeLimit} min`
+                          : "Sin límite"}
+                      </span>
                     </div>
                     <div className="flex items-center text-sm text-gray-600">
                       <Users className="w-4 h-4 mr-1.5 text-gray-400" />

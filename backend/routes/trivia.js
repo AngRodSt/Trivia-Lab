@@ -21,6 +21,7 @@ router.get("/", async (req, res) => {
       description: trivia.description,
       code: trivia.code,
       difficulty: trivia.difficulty,
+      timeLimit: trivia.timeLimit,
       createdBy: trivia.createdBy,
       questions: trivia.questions,
       questionsCount: trivia.questions.length,
@@ -43,12 +44,20 @@ router.post("/create", authenticateToken, async (req, res) => {
       });
     }
 
-    const { title, description, difficulty, questions } = req.body;
+    const { title, description, difficulty, timeLimit, questions } = req.body;
 
     // Validar que la dificultad sea válida
     if (!difficulty || !["easy", "medium", "hard"].includes(difficulty)) {
       return res.status(400).json({
         error: "La dificultad debe ser 'easy', 'medium' o 'hard'",
+      });
+    }
+
+    // Validar timeLimit si se proporciona
+    const parsedTimeLimit = timeLimit ? parseInt(timeLimit, 10) : null;
+    if (timeLimit && (isNaN(parsedTimeLimit) || parsedTimeLimit <= 0)) {
+      return res.status(400).json({
+        error: "El límite de tiempo debe ser un número positivo",
       });
     }
 
@@ -63,6 +72,7 @@ router.post("/create", authenticateToken, async (req, res) => {
       description,
       code,
       difficulty,
+      timeLimit: parsedTimeLimit,
       createdBy: req.user._id,
       questions: [],
       isPublic,
@@ -225,6 +235,7 @@ router.post("/:id/start", authenticateToken, async (req, res) => {
         _id: trivia._id,
         title: trivia.title,
         description: trivia.description,
+        timeLimit: trivia.timeLimit, // Enviar límite de tiempo
         questions: trivia.questions.map((q) => ({
           _id: q._id,
           text: q.text,

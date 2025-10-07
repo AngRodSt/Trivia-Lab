@@ -34,6 +34,11 @@ const TriviaGame = () => {
 
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showResult, setShowResult] = useState(false);
+  const [timeWarningShown, setTimeWarningShown] = useState({
+    5: false,
+    2: false,
+    1: false,
+  });
 
   useEffect(() => {
     if (id) {
@@ -43,6 +48,27 @@ const TriviaGame = () => {
       resetTrivia();
     };
   }, [id, loadTrivia, resetTrivia]);
+
+  // Efecto para mostrar advertencias de tiempo
+  useEffect(() => {
+    if (timeRemaining !== null && isPlaying) {
+      const minutes = Math.floor(timeRemaining / 60);
+
+      // Mostrar advertencia cuando quedan 5, 2 o 1 minuto
+      if (minutes === 5 && !timeWarningShown[5] && timeRemaining <= 300) {
+        setTimeWarningShown((prev) => ({ ...prev, 5: true }));
+        // Aquí podrías agregar una notificación toast
+      } else if (
+        minutes === 2 &&
+        !timeWarningShown[2] &&
+        timeRemaining <= 120
+      ) {
+        setTimeWarningShown((prev) => ({ ...prev, 2: true }));
+      } else if (minutes === 1 && !timeWarningShown[1] && timeRemaining <= 60) {
+        setTimeWarningShown((prev) => ({ ...prev, 1: true }));
+      }
+    }
+  }, [timeRemaining, isPlaying, timeWarningShown]);
 
   const handleStartTrivia = () => {
     startTrivia(id);
@@ -55,7 +81,11 @@ const TriviaGame = () => {
 
     // Enviar respuesta automáticamente
     try {
-      const currentQ = currentTrivia.questions[currentQuestion];
+      const currentQ = currentTrivia.questions?.[currentQuestion];
+      if (!currentQ) {
+        console.error("Pregunta no encontrada");
+        return;
+      }
       await submitAnswer(currentQ._id, answerIndex);
       setShowResult(true);
 
@@ -209,10 +239,12 @@ const TriviaGame = () => {
             </div>
 
             <h2 className="text-4xl font-bold text-gray-900 mb-3">
-              ¡Trivia Completada!
+              {timeRemaining === 0 ? "¡Tiempo Agotado!" : "¡Trivia Completada!"}
             </h2>
             <p className="text-xl text-gray-600 mb-10">
-              Has terminado "{currentTrivia.title}"
+              {timeRemaining === 0
+                ? `Se agotó el tiempo en "${currentTrivia.title}"`
+                : `Has terminado "${currentTrivia.title}"`}
             </p>
 
             <div className="grid grid-cols-2 gap-8 mb-10">
@@ -330,7 +362,24 @@ const TriviaGame = () => {
   }
 
   // Game screen
-  const currentQ = currentTrivia.questions[currentQuestion];
+  const currentQ = currentTrivia.questions?.[currentQuestion];
+
+  // Verificar que currentQ existe antes de continuar
+  if (!currentQ) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-amber-500 mx-auto mb-4"></div>
+          <p className="text-lg text-gray-600">Cargando pregunta...</p>
+          <p className="text-sm text-gray-500 mt-2">
+            Pregunta {currentQuestion + 1} de{" "}
+            {currentTrivia.questions?.length || 0}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   const progress =
     ((currentQuestion + 1) / currentTrivia.questions.length) * 100;
 
@@ -357,16 +406,36 @@ const TriviaGame = () => {
 
               {timeRemaining !== null && (
                 <div className="flex items-center space-x-2">
-                  <div className="p-2 bg-orange-100 rounded-lg">
-                    <Clock className="w-5 h-5 text-orange-600" />
+                  <div
+                    className={`p-2 rounded-lg ${
+                      timeRemaining < 60
+                        ? "bg-red-100"
+                        : timeRemaining < 300
+                        ? "bg-orange-100"
+                        : "bg-green-100"
+                    }`}
+                  >
+                    <Clock
+                      className={`w-5 h-5 ${
+                        timeRemaining < 60
+                          ? "text-red-600"
+                          : timeRemaining < 300
+                          ? "text-orange-600"
+                          : "text-green-600"
+                      }`}
+                    />
                   </div>
                   <div>
                     <span className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-                      Tiempo
+                      Tiempo Restante
                     </span>
                     <div
                       className={`text-lg font-bold ${
-                        timeRemaining < 60 ? "text-red-600" : "text-gray-900"
+                        timeRemaining < 60
+                          ? "text-red-600"
+                          : timeRemaining < 300
+                          ? "text-orange-600"
+                          : "text-green-600"
                       }`}
                     >
                       {formatTime(timeRemaining)}
@@ -396,6 +465,34 @@ const TriviaGame = () => {
             <span>{Math.round(progress)}% completado</span>
             <span>Final</span>
           </div>
+
+          {/* Time Progress Bar */}
+          {timeRemaining !== null && (
+            <div className="mt-4">
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className={`h-2 rounded-full transition-all duration-1000 ease-linear ${
+                    timeRemaining < 60
+                      ? "bg-gradient-to-r from-red-500 to-red-600"
+                      : timeRemaining < 300
+                      ? "bg-gradient-to-r from-orange-400 to-orange-500"
+                      : "bg-gradient-to-r from-green-400 to-green-500"
+                  }`}
+                  style={{
+                    width: `${
+                      currentTrivia.timeLimit
+                        ? (timeRemaining / (currentTrivia.timeLimit * 60)) * 100
+                        : 0
+                    }%`,
+                  }}
+                />
+              </div>
+              <div className="flex justify-between text-xs text-gray-400 mt-1">
+                <span>Tiempo agotado</span>
+                <span>Tiempo inicial</span>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Question */}
